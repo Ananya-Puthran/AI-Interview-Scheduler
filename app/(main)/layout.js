@@ -1,4 +1,3 @@
-import react from 'react';
 import DashboardProvider from "./provider";
 
 function DashboardLayout({ children }) {

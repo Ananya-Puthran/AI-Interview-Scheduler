@@ -1,128 +1,55 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-
+import React, { useEffect, useState } from "react";
 import { supabase } from "@/services/supabaseClient";
-
-const UserDetailContext = createContext(null);
+import { UserDetailContext } from "@/context/UserDetailContext";
 
 function Provider({ children }) {
-  const [user, setUser] = useState(null);
-
-  const CreateNewUser = async () => {
-    try {
-      console.log("Checking logged-in user...");
-
-      // Get the currently logged-in Supabase user
-      const {
-        data: { user: supabaseUser },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError) {
-        console.error("Error getting user:", userError);
-        return;
-      }
-
-      // No user logged in
-      if (!supabaseUser) {
-        console.log("No user logged in");
-        return;
-      }
-
-      console.log("Supabase user:", supabaseUser);
-
-      // Check if user already exists in Users table
-      const { data: users, error: fetchError } = await supabase
+  const [user,setUser] = useState(null);
+  const CreateNewUser = () => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      // check if user already exists
+      let { data: Users, error } = await supabase
         .from("Users")
         .select("*")
-        .eq("email", supabaseUser.email);
+        .eq("email", user?.email);
 
-      if (fetchError) {
-        console.error("Error checking Users table:", fetchError);
-        return;
-      }
+      // if not, create new user
+      console.log(Users);
 
-      console.log("Existing users:", users);
-
-      // User doesn't exist
-      if (!users || users.length === 0) {
-        console.log("Creating new user...");
-
-        const { data: newUser, error: insertError } = await supabase
+      if (Users?.length === 0) {
+        const { data, error } = await supabase
           .from("Users")
           .insert([
             {
-              email: supabaseUser.email,
-              name: supabaseUser.user_metadata?.full_name,
-              picture: supabaseUser.user_metadata?.avatar_url,
+              name: user?.user_metadata?.name,
+              email: user?.email,
+              picture: user?.user_metadata?.picture,
             },
-          ])
-          .select()
-          .single();
+          ]);
 
-        if (insertError) {
-          console.error("Error creating user:", insertError);
-          return;
-        }
-
-        console.log("New user created:", newUser);
-
-        setUser(newUser);
-      } else {
-        // User already exists
-        console.log("User already exists:", users[0]);
-
-        setUser(users[0]);
+        console.log(data);
+        setUser(data);
+        return;
       }
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
+      setUser(Users[0]);
+    });
   };
 
   useEffect(() => {
-    // Check user when Provider loads
     CreateNewUser();
-
-    // Listen for login/logout events
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth event:", event);
-
-      if (session?.user) {
-        CreateNewUser();
-      } else {
-        setUser(null);
-      }
-    });
-
-    // Cleanup
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
-  return (
-    <UserDetailContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserDetailContext.Provider>
+  return(
+  <UserDetailContext.Provider value={{ user, setUser }}>
+  <div>{children}</div>
+  </UserDetailContext.Provider>
   );
 }
 
 export default Provider;
 
-export const useUser = () => {
+export const useUserDetail = () => {
   const context = useContext(UserDetailContext);
-
-  if (!context) {
-    throw new Error("useUser must be used inside Provider");
-  }
-
   return context;
-};
+} 
