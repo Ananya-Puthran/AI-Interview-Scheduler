@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { supabase } from "@/services/supabaseClient";
 import { UserDetailContext } from "@/context/UserDetailContext";
 
