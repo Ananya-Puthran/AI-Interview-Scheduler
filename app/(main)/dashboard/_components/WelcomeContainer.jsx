@@ -6,8 +6,8 @@ import { useUserDetail } from '@/app/provider';
 function WelcomeContainer(){
     const {user}=useUserDetail();
     return(
-        <div className="bg-white p-3 rounded-lg shadow-md w-full flex items-center justify-between">
-            <div >
+            <div className="bg-white p-3 rounded-lg shadow-md mx-4 mt-4 flex items-center justify-between">         
+                <div >
                 <h2 className="text-lg font-bold">Welcome Back, {user?.name || 'User'}!</h2>
                 <h2 className="text-md">AI-Driven Interview, Hassle-Free Hiring</h2>
             </div>

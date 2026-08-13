@@ -1,12 +1,14 @@
 import React from "react";
 import { Phone, Video } from "lucide-react";
+import Link from "next/link";
 
 function CreateOptions() {
   return (
     <div className="grid grid-cols-2 gap-4 mt-4">
 
       {/* Create New Interview */}
-      <div className="bg-white p-3 rounded-lg shadow-md flex items-center cursor-pointer hover:bg-gray-100 transition duration-300">
+      <Link href="/dashboard/create-interview" className="bg-white p-3 rounded-lg shadow-md flex items-center cursor-pointer hover:bg-gray-100 
+      transition duration-300 cursor-pointer">
         <Video className="p-2 text-primary bg-blue-100 rounded-full h-12 w-12" />
 
         <div className="ml-4">
@@ -15,7 +17,7 @@ function CreateOptions() {
             Start a new video interview session
           </p>
         </div>
-      </div>
+      </Link>
 
       {/* Phone Screening */}
       <div className="bg-white p-3 rounded-lg shadow-md flex items-center cursor-pointer hover:bg-gray-100 transition duration-300">

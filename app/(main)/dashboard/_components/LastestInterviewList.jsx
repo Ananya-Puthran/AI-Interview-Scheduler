@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Camera, Video } from "lucide-react";
+import { Camera, Video, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function LatestInterviewsList() {
   const [interviewList, setInterviewList] = useState([]);
@@ -18,9 +19,10 @@ function LatestInterviewsList() {
             You don't have any interviews created!
           </h2>
 
-          <button className="mt-3 px-4 py-2 bg-primary text-white rounded-lg">
-            Create New Interview
-          </button>
+          <Button className="mt-5 rounded-lg">
+            <Plus />
+             Create New Interview
+          </Button>
         </div>
       )}
     </div>

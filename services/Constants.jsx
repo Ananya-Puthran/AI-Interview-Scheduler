@@ -4,6 +4,11 @@ import {
   List,
   WalletCards,
   Settings,
+  Code2Icon,
+  User2Icon,
+  BriefcaseBusinessIcon,
+  Puzzle,
+  Crown,
 } from "lucide-react";
 
 export const SideBarOptions = [
@@ -33,3 +38,26 @@ export const SideBarOptions = [
     path: "/settings",
   },
 ];
+
+export const InterviewType=[
+  {
+    title:'Technical',
+    icon: Code2Icon
+  },
+  {
+    title:'Behavioral',
+    icon: User2Icon
+  },
+  {
+    title:'Experience',
+    icon: BriefcaseBusinessIcon
+  },
+  {
+    title:'Problem Solving',
+    icon: Puzzle
+  },
+  {
+    title:'Leadership',
+    icon: Crown
+  }
+]

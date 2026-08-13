@@ -7,8 +7,8 @@ function Dashboard() {
   
   return (
     <div className="w-full">
-      <WelcomeContainer />
-      <h2 className="text-lg font-bold mt-4">Dashboard</h2>
+      {/* <WelcomeContainer /> */}
+      <h2 className="text-lg font-bold ">Dashboard</h2>
       <CreateOptions />
       <LatestInterviewsList />
     </div>
