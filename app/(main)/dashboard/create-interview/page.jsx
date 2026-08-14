@@ -5,7 +5,8 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import FormContainer from "./_components/FormContainer";
 import React, { useState } from "react";
-
+import QuestionList from "./_components/QuestionList";
+import { toast } from "sonner";
 function CreateInterview() {
   const router = useRouter();
 
@@ -21,6 +22,13 @@ function CreateInterview() {
   };
 
   console.log("FormData", formData);
+  const onGoToNext=()=>{
+    if(!formData?.jobPosition||!formData?.jobDescription||!formData?.duration||!formData.type)
+    {  toast("Please enter all details!")
+      return ;
+    }
+    setStep(step+1);
+  }
 
   return (
     <div className="px-10 md:px-24 lg:px-44 xl:px-56">
@@ -40,11 +48,12 @@ function CreateInterview() {
         className="mt-4 w-full"
       />
 
-      <FormContainer
+      {step==1?<FormContainer
         onHandleInputChange={onHandleInputChange}
-      />
+      GoToNext={()=>onGoToNext()}/>
+      :step==2?<QuestionList formData={formData}/>:null}
     </div>
   );
 }
 
-export default CreateInterview;
+export default CreateInterview; 

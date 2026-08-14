@@ -2,7 +2,7 @@
 
 import { Input } from "@base-ui/react";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { InterviewType } from "@/services/Constants";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowRight } from "lucide-react";
 
-const FormContainer = ({ onHandleInputChange }) => {
+const FormContainer = ({ onHandleInputChange, GoToNext }) => {
   const [interviewType, setInterviewType] = useState([]);
 
   useEffect(() => {
@@ -30,11 +30,11 @@ const FormContainer = ({ onHandleInputChange }) => {
     { label: "60 Min", value: "60 Min" },
   ];
 
-  const handleInterviewType = (title) => {
+  const AddInterviewType = (type) => {
     setInterviewType((prev) =>
-      prev.includes(title)
-        ? prev.filter((item) => item !== title)
-        : [...prev, title]
+      prev.includes(type)
+        ? prev.filter((item) => item !== type)
+        : [...prev, type]
     );
   };
 
@@ -114,7 +114,7 @@ const FormContainer = ({ onHandleInputChange }) => {
             return (
               <div
                 key={type.title}
-                onClick={() => handleInterviewType(type.title)}
+                onClick={() => AddInterviewType(type.title)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                   isSelected
                     ? "bg-blue-100 border-blue-500 text-blue-600"
@@ -122,7 +122,10 @@ const FormContainer = ({ onHandleInputChange }) => {
                 }`}
               >
                 <type.icon className="h-3.5 w-3.5" />
-                <span className="text-sm">{type.title}</span>
+
+                <span className="text-sm">
+                  {type.title}
+                </span>
               </div>
             );
           })}
@@ -131,7 +134,10 @@ const FormContainer = ({ onHandleInputChange }) => {
 
       {/* Generate Questions */}
       <div className="mt-7 flex justify-end">
-        <Button className="mt-5 rounded-lg">
+        <Button
+          onClick={GoToNext}
+          className="mt-5 rounded-lg"
+        >
           Generate Question
           <ArrowRight />
         </Button>
