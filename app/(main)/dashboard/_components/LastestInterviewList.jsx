@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Camera, Video, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function LatestInterviewsList() {
   const [interviewList, setInterviewList] = useState([]);
@@ -19,10 +20,9 @@ function LatestInterviewsList() {
             You don't have any interviews created!
           </h2>
 
-          <Button className="mt-5 rounded-lg">
-            <Plus />
-             Create New Interview
-          </Button>
+          <Link href={"/dashboard/create-interview"}>
+          <Button className="mt-5 rounded-lg"><Plus />Create New Interview</Button>
+          </Link>
         </div>
       )}
     </div>

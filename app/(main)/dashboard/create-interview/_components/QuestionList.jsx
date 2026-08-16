@@ -10,7 +10,7 @@ import { supabase } from "@/services/supabaseClient";
 import { v4 as uuid } from 'uuid';
 import { useUserDetail } from "@/app/provider";
 
-const QuestionList = ({ formData }) => {
+const QuestionList = ({ formData, onCreateLink }) => {
     const [loading, setLoading] = useState(true);
     const [questionList, setQuestionList] = useState();
     const { user } = useUserDetail();
@@ -62,43 +62,51 @@ const QuestionList = ({ formData }) => {
             ])
             .select()
         setSaveLoading(false);
-        console.log(data);
+        onCreateLink(interview_id)
 
     }
     return (
-        <div>
-            {loading && (
-                <div className="mt-5 p-5 bg-blue-50 rounded-xl border border-gray-100 flex gap-5 items-center">
-                    <Loader2Icon className="animate-spin" />
+    <div>
+      {loading && (
+        <div className="mt-5 p-5 bg-blue-50 rounded-xl border border-gray-100 flex gap-5 items-center">
+          <Loader2Icon className="animate-spin" />
 
-                    <div>
-                        <h2 className="font-medium">Generating interview questions</h2>
-                        <p className="text-primary">
-                            Our AI is crafting personalized questions based on your job
-                            position.
-                        </p>
-                    </div>
-                </div>
-            )}
+          <div>
+            <h2 className="font-medium">
+              Generating interview questions
+            </h2>
 
-            {questionList?.length > 0 && (
-                <div>
-                    <QuestionListContainer questionList={questionList} />
-                </div>
-            )}
-
-            <div className="flex justify-end mt-5">
-                <Button
-                    onClick={() => onFinish()}
-                    disabled={saveLoading}
-                    className="mt-5 p-5 rounded-lg text-lg"
-                >
-                    {saveLoading && <Loader2 className="animate-spin" />}
-                    {saveLoading ? "Saving..." : "Finish"}
-                </Button>
-            </div>
+            <p className="text-primary">
+              Our AI is crafting personalized questions based on your job
+              position.
+            </p>
+          </div>
         </div>
-    );
+      )}
+
+      {questionList?.length > 0 && (
+        <div>
+          <QuestionListContainer questionList={questionList} />
+
+          <div className="flex justify-end mt-5">
+            <Button
+              onClick={() => onFinish()}
+              disabled={saveLoading}
+              className="mt-5 p-5 rounded-lg text-lg"
+            >
+              {saveLoading && (
+                <Loader2 className="animate-spin" />
+              )}
+
+              {saveLoading
+                ? "Saving..."
+                : "Create Interview Link & Finish"}
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default QuestionList;

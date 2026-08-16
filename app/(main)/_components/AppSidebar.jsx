@@ -25,8 +25,10 @@ export function AppSidebar() {
             width={200} 
             height={100} 
             className= "w-[180px]"/>
+
+            <Link href={"/dashboard/create-interview"}>
         <Button className="mt-5 w-full rounded-lg justify-center" > 
-            <Plus/> Create New Interview</Button> 
+            <Plus/> Create New Interview</Button> </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
