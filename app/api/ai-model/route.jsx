@@ -12,10 +12,10 @@ export async function POST(req) {
     } = await req.json();
 
     const FINAL_PROMPT = QUESTIONS_PROMPT
-      .replace("{{jobTitle}}", jobPosition)
-      .replace("{{jobDescription}}", jobDescription)
-      .replace("{{duration}}", duration)
-      .replace("{{type}}", type.join(", "));
+      .replaceAll("{{jobTitle}}", jobPosition)
+      .replaceAll("{{jobDescription}}", jobDescription)
+      .replaceAll("{{duration}}", duration)
+      .replaceAll("{{type}}", type.join(", "));
 
     console.log("FINAL PROMPT:", FINAL_PROMPT);
 
@@ -34,12 +34,20 @@ export async function POST(req) {
       ],
     });
 
-    console.log("AI RESPONSE:", completion.choices[0].message);
+    console.log(completion.choices[0].message);
 
     return NextResponse.json(completion.choices[0].message);
-  } catch (error) {
-    console.log(error);
 
-    return NextResponse.json(error);
+  } catch (error) {
+    console.error("AI API ERROR:", error);
+
+    return NextResponse.json(
+      {
+        error: error?.message || "AI request failed",
+      },
+      {
+        status: error?.status || 500,
+      }
+    );
   }
 }
