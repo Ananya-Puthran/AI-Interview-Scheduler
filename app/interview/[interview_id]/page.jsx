@@ -1,14 +1,17 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { useRouter } from "next/navigation";
 import InterviewHeader from '../_components/InterviewHeader'
 import Image from 'next/image'
-import { Clock, Video } from 'lucide-react';
+import { Clock, Loader2Icon, Video } from 'lucide-react';
 import { Input } from "@base-ui/react";
 import { Button } from "@/components/ui/button";
 import { Info } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { supabase } from '@/services/supabaseClient';
 import { toast } from 'sonner';
+import { InterviewDataContext } from '@/context/InterviewDataContext';
+import QuestionList from '@/app/(main)/dashboard/create-interview/_components/QuestionList';
 
 function Interview() {
   const { interview_id } = useParams();
@@ -16,6 +19,8 @@ function Interview() {
   const [interviewData, setInterviewData]=useState();
   const [userName, setUserName]=useState();
   const [loading, setLoading]=useState(false);
+  const {interviewInfo, setInterviewInfo}=useContext(InterviewDataContext);
+  const router =useRouter();
 
   useEffect(()=>{
     interview_id&&GetInterviewDetails();
@@ -41,6 +46,21 @@ function Interview() {
     }
   }
 
+  const onJoinInterview=async()=>{
+    setLoading(true);
+    let{data:Interviews, error}= await supabase
+    .from('Interviews')
+    .select('*')
+    .eq('interview_id', interview_id)
+
+    console.log(Interviews[0]);
+    setInterviewInfo({
+      userName: userName,
+      interviewData:Interviews[0]
+    });
+    router.push('/interview/'+interview_id+'/start')
+    setLoading(false);
+  }
   return (
     <div className="px-10 md:px-28 lg:px-48 xl:px-64 mt-10">
       <div className="flex flex-col items-center justify-center border 
@@ -92,8 +112,9 @@ function Interview() {
           </div>
         </div>
         <Button className="h-10 rounded-lg mt-5 mb-15 w-full font-bold text-lg "
-        disabled={loading||!userName}> 
-          <Video /> Join Interview
+        disabled={loading||!userName}
+        onClick={()=>onJoinInterview()}>
+          <Video />{loading &&<Loader2Icon/> }Join Interview
         </Button>
 
       </div>
